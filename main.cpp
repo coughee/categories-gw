@@ -1,4 +1,3 @@
-
 /* 
  * File:   main.cpp
  * Author: Jonathan
@@ -355,13 +354,13 @@ void newtonRhapsonSolver(std::vector<std::vector<std::vector< int  > > > &God){
  
     
 
-  int sum = 0;
+  double sum = 0;
   bool skip = false;
   if(fin){
     for(int i = 0; i < God.size(); i++){
       sum += abs(coupling[i]);
     }
-    if(abs(abs(sum) - abs(log(Q))) < tol){
+    if(abs(sum - log((double)Q)) < 1e-1){
 
       for(int i = 0; i < God.size(); i++){
 	coupling[i] = mult*rand()/(double)RAND_MAX - con;
@@ -374,7 +373,6 @@ void newtonRhapsonSolver(std::vector<std::vector<std::vector< int  > > > &God){
   
 
   if(fin){
-    
     break;
   }
   if(!skip){
@@ -433,6 +431,21 @@ void newtonRhapsonSolver(std::vector<std::vector<std::vector< int  > > > &God){
   skip = false;
 
 }
+  mat JacT;
+  JacT.set_size(God.size(), God.size());
+  //calculate eigen vectors
+  for(int i = 0; i < God.size(); i++){
+    for(int j = 0; j < God.size(); j++){
+      JacT(i,j) = Jacobian[i][j] + identity[i][j];
+    } 
+  }
+  cx_vec eigval;
+  cx_mat eigvec;
+  eig_gen(eigval, eigvec, JacT);
+  for(int i = 0; i < eigval.n_elem; i++){
+    cout << log((double)Q)/log(eigval(i)) << " ";
+  }
+
 
 
   cout << "convergence found" << endl;
