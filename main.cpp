@@ -386,7 +386,6 @@ void newtonRhapsonSolver(std::vector<std::vector<std::vector< int  > > > &God){
   }
   
   for(int i = 0; i < God.size(); i++){
-    //coupling[i] = couplingDeriv[i] - coupling[i];
     for(int j = 0; j < God.size(); j++){
       Jacobian[i][j] = Jacobian[i][j] - identity[i][j];
     }
@@ -429,30 +428,30 @@ void newtonRhapsonSolver(std::vector<std::vector<std::vector< int  > > > &God){
   }
   skip = false;
 
-}
+  }
+  
+  for(int i = 0; i < God.size(); i++){
+    Jacobian[i][i]++;
+  }
+    
   mat JacT;
   JacT.set_size(God.size(), God.size());
-  //calculate eigen vectors
   for(int i = 0; i < God.size(); i++){
     for(int j = 0; j < God.size(); j++){
-      JacT(i,j) = Jacobian[i][j] + identity[i][j];
-    } 
+      JacT(i,j) = Jacobian[i][j];
+      cout << Jacobian[i][j] << "\t";
+    }
+    cout << endl;
   }
+  cout << endl;
+  //calculate eigen vectors
   cx_vec eigval;
   cx_mat eigvec;
   eig_gen(eigval, eigvec, JacT);
   for(int i = 0; i < eigval.n_elem; i++){
-    cout << log((double)Q)/log(eigval(i)) << " ";
+    cout << eigval(i) << " ";
+    //cout << log((double)B)/log(eigval(i)) << " ";
   }
-
-
-
-  cout << "convergence found" << endl;
-  for(int i = 0; i < God.size(); i++){
-    cout << coupling[i] << " ";
-  }
-  cout << endl;
-
 }
 
 std::vector<int> calcCat(groupCounter &paraCount, matConvert &pLat, int* catHash[]) {
