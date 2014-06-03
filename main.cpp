@@ -23,7 +23,6 @@
 #include <fstream>
 #include <list>
 #include "matConvert.h"
-#include "matrix_h"
 #include <ctime>
 #include <armadillo>
 //DEBUG FLAG, verbose output, -D command line.
