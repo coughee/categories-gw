@@ -540,19 +540,22 @@ bool checkSymmetry(matConvert mat) {
 
                         temp = mat;
                         symmetryList.push_back(temp);
-                        mat.oneTwoSwitch();
+			if(Z3 && Q == 2){
+			  mat.oneTwoSwitch();
+			}
                     }
                     mat.nextBoundaryY();
                 }
 
                 mat.nextBoundaryX();
             }
-
-            mat.nextParity();
-
+	    if(Z3 && Q == 3){
+	      mat.nextParity();
+	    }
         }
 
-        mat.rotate();
+	mat.rotate();
+
     }
 
     return false;
