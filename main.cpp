@@ -359,7 +359,7 @@ void newtonRhapsonSolver(std::vector<std::vector<std::vector< int  > > > &God){
     for(int i = 0; i < God.size(); i++){
       sum += abs(coupling[i]);
     }
-    if(abs(coupling[0]) - abs(log(Q)) < 1e-1){
+    if(abs(sum) - abs(log(Q)) < 1e-1){
 
       for(int i = 0; i < God.size(); i++){
 	coupling[i] = mult*rand()/(double)RAND_MAX - con;
