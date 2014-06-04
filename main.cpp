@@ -266,8 +266,8 @@ void newtonRhapsonSolver(std::vector<std::vector<std::vector< int  > > > &God){
   double bSumDeriv[God.size()][God.size()];
   double identity[God.size()][God.size()];
   double premult = (double)B/(double)N;
-  double con =  2;
-  double mult = 2;
+  double con  = 4;
+  double mult = 4;
   srand(time(0));
   for(int i = 0; i < God.size(); i++){
     //coupling[i] = 0;
@@ -320,11 +320,11 @@ void newtonRhapsonSolver(std::vector<std::vector<std::vector< int  > > > &God){
   }
 
   for(int i = 0; i < God.size(); i++){
-
+    bSumDeriv[i][0] = N*N*bSum[i];
   }
 
   for(int i = 0; i < God.size(); i++){
-    for(int m = 0; m < God.size(); m++){
+    for(int m = 1; m < God.size(); m++){
       for(unsigned long int j = 0; j < God[i].size(); j++){
 	temp = (double)N*N*coupling[0];
 	for(int k = 1; k < God.size(); k++){
@@ -359,7 +359,7 @@ void newtonRhapsonSolver(std::vector<std::vector<std::vector< int  > > > &God){
     for(int i = 0; i < God.size(); i++){
       sum += abs(coupling[i]);
     }
-    if(abs(sum - log((double)Q)) < 1e-1){
+    if(abs(coupling[0]) - abs(log(Q)) < 1e-1){
 
       for(int i = 0; i < God.size(); i++){
 	coupling[i] = mult*rand()/(double)RAND_MAX - con;
@@ -433,7 +433,20 @@ void newtonRhapsonSolver(std::vector<std::vector<std::vector< int  > > > &God){
   for(int i = 0; i < God.size(); i++){
     Jacobian[i][i]++;
   }
-    
+  cout << endl;
+  cout << "K Dash: ";
+  for(int i = 0; i < God.size(); i++){
+    cout << couplingDeriv[i] << " ";
+  }
+  cout << endl << endl;
+  cout << "B Sum Deriv:" << endl;
+  for(int i = 0; i < God.size(); i++){
+    for(int j = 0; j < God.size(); j++){
+      cout << bSumDeriv[i][j] << " ";
+    }
+    cout << endl;
+  }
+  cout << endl;
   mat JacT;
   JacT.set_size(God.size(), God.size());
   for(int i = 0; i < God.size(); i++){
@@ -448,8 +461,9 @@ void newtonRhapsonSolver(std::vector<std::vector<std::vector< int  > > > &God){
   cx_vec eigval;
   cx_mat eigvec;
   eig_gen(eigval, eigvec, JacT);
+  cout << "Critical Exponents: ";
   for(int i = 0; i < eigval.n_elem; i++){
-    cout << eigval(i) << " ";
+    cout << log(B)/log(real(eigval(i,0))) << " ";
     //cout << log((double)B)/log(eigval(i)) << " ";
   }
 }
