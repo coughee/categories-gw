@@ -127,7 +127,7 @@ int main(int argc, char** argv) {
 
         }
         if (found == false) {
-	  mat.printMat();
+	
             paraCount.newGroup(i);
             catHash[i % (unsigned long int) (pow(Q, N * N / pow(B, 2.0)))][0] = paraCount.currentGroupCount() - 1;
             catHash[i % (unsigned long int) (pow(Q, N * N / pow(B, 2.0)))][1] = 1;
@@ -217,11 +217,6 @@ int main(int argc, char** argv) {
             cout << n / pow(Q, N * N) << endl;
         }
     }
-    cout << "God matrix sizing: " << endl;
-    for(int i = 0; i < God.size(); i++){
-      cout << God[i].size() << endl;
-    }
-    cout << endl;
     cout << "Outputting God...";
     outputGod(God);
     cout << "Done" << endl;
