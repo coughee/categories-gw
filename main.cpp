@@ -140,6 +140,7 @@ int main(int argc, char** argv) {
     }
     std::vector<int> renormHash;
     //create renormalisation hash table (BxB lattices)
+    cout << "Number of paradigms: " << paraCount.currentGroupCount() << endl;
     matConvert renormMatHash = matConvert(1, Q, B);
     renormMatHash.convertVal(0);
     renormHash.push_back(renormMatHash.findRN());
