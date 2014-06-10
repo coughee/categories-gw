@@ -136,7 +136,7 @@ int main(int argc, char** argv) {
         }
 
     }
-
+    cout << "Number of Paradigms: " << paraCount.currentGroupCount() << endl;
     std::vector<int> renormHash;
     //create renormalisation hash table (BxB lattices)
     matConvert renormMatHash = matConvert(1, Q, B);
