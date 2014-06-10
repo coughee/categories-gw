@@ -531,35 +531,19 @@ void writeMatGroup(matConvert &mat, unsigned long int group) {
 }
 
 bool checkSymmetry(matConvert mat) {
-  
-    matConvert temp = mat;
-    for (int rotNum = 0; rotNum < 4; rotNum++) {
-  
-
+  matConvert mCopyMaster = mat;
+  for (int rotNum = 0; rotNum < 4; rotNum++) {
             for (int bndNum = 0; bndNum < N; bndNum++) {
                 for (int w = 0; w < N; w++) {
-                    
-		      
-                        
-		  cycleParity(mat,Q);
-			
-			
-			
-                    
-                    mat.nextBoundaryY();
+		  mCopyMaster = mat;
+		  cycleParity(mCopyMaster,Q);
+		  mat.nextBoundaryY();
                 }
-
                 mat.nextBoundaryX();
             }
 
-
-
-
-
 	mat.rotate();
-
     }
-
     return false;
 }
 
@@ -600,9 +584,9 @@ void cycleParity(matConvert &mat, int Qcur){
 
     cycleParity(mat, Qcur - 1);
     matConvert temp = mat;
-    symmetryList.push_back(temp);
-    mat.nextParity(Qcur);
 
+    mat.nextParity(Qcur);
+    symmetryList.push_back(temp);
 
   }
 }
