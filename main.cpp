@@ -139,6 +139,12 @@ int main(int argc, char** argv) {
 
     }
     cout << "Number of paradigms: " << paraCount.currentGroupCount() << endl;
+    cout << "Printing paradigms: " << endl << endl;
+    for(int i = 0; i < paraCount.currentGroupCount(); i++){
+      mat.convertVal(paraCount.matVals[i]);
+      mat.printMat();
+      cout << endl;
+    }
     mat.lat[0][1] = 1;
     mat.lat[1][1] = 2;
     cycleParity(mat,Q);
@@ -537,6 +543,7 @@ bool checkSymmetry(matConvert mat) {
                 for (int w = 0; w < N; w++) {
 		  mCopyMaster = mat;
 		  cycleParity(mCopyMaster,Q);
+	
 		  mat.nextBoundaryY();
                 }
                 mat.nextBoundaryX();
@@ -582,13 +589,14 @@ void cycleParity(matConvert &mat, int Qcur){
   for(int i = 0; i < Qcur; i++){
     
 
-    cycleParity(mat, Qcur - 1);
-    matConvert temp = mat;
+      cycleParity(mat, Qcur - 1);
 
     mat.nextParity(Qcur);
+    matConvert temp = mat;
     symmetryList.push_back(temp);
 
   }
+
 }
 
 void buildFileNamePrefix() {

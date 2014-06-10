@@ -233,6 +233,9 @@ void matConvert::nextParity(){
 }
 
 void matConvert::nextParity(int Qmax){
+
+
+
     for(int i = 0; i < N; i++){
         for(int j = 0; j < N; j++){
 	  if(lat[i][j] < Qmax){
