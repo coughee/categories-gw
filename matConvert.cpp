@@ -220,6 +220,7 @@ void matConvert::nextBoundaryY(){
     }
     
 }
+
 void matConvert::nextParity(){
     for(int i = 0; i < N; i++){
         for(int j = 0; j < N; j++){
@@ -231,6 +232,19 @@ void matConvert::nextParity(){
     }
 }
 
+void matConvert::nextParity(int Qmax){
+    for(int i = 0; i < N; i++){
+        for(int j = 0; j < N; j++){
+	  if(lat[i][j] < Qmax){
+	    lat[i][j]++;
+
+            if(lat[i][j] > Qmax - 1){
+                lat[i][j] = 0;
+            }
+	  }
+        }
+    }
+}
 void matConvert::oneTwoSwitch(){
     for(int i = 0; i < N; i++){
         for(int j = 0; j < N; j++){

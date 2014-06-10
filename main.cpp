@@ -38,6 +38,7 @@ std::vector<int> calcCat(groupCounter &paraCount, matConvert &pLat, int* catHash
 int boundary(int tmp, int Ntemp);
 void outputGod(std::vector<std::vector<std::vector< int > > > &God);
 void newtonRhapsonSolver(std::vector<std::vector<std::vector< int > > > &God);
+void cycleParity(matConvert &mat, int Qcur);
 using namespace std;
 using namespace arma;
 /*
@@ -111,6 +112,7 @@ int main(int argc, char** argv) {
         }
         found = false;
         mat.convertVal(i);
+	symmetryList.clear();
         checkSymmetry(mat);
         for (unsigned long int j = 0; j < paraCount.currentGroupCount(); j++) {
             mat2.convertVal(paraCount.matValAt(j));
@@ -127,7 +129,7 @@ int main(int argc, char** argv) {
 
         }
         if (found == false) {
-	
+	  
             paraCount.newGroup(i);
             catHash[i % (unsigned long int) (pow(Q, N * N / pow(B, 2.0)))][0] = paraCount.currentGroupCount() - 1;
             catHash[i % (unsigned long int) (pow(Q, N * N / pow(B, 2.0)))][1] = 1;
@@ -136,7 +138,10 @@ int main(int argc, char** argv) {
         }
 
     }
-
+    cout << "Number of paradigms: " << paraCount.currentGroupCount() << endl;
+    mat.lat[0][1] = 1;
+    mat.lat[1][1] = 2;
+    cycleParity(mat,Q);
     std::vector<int> renormHash;
     //create renormalisation hash table (BxB lattices)
     matConvert renormMatHash = matConvert(1, Q, B);
@@ -456,10 +461,12 @@ void newtonRhapsonSolver(std::vector<std::vector<std::vector< int  > > > &God){
   cx_vec eigval;
   cx_mat eigvec;
   eig_gen(eigval, eigvec, JacT);
-  cout << "Critical Exponents: ";
+  cout << "Eigen values: ";
   for(int i = 0; i < eigval.n_elem; i++){
-    cout << log(B)/log(real(eigval(i,0))) << " ";
-    //cout << log((double)B)/log(eigval(i)) << " ";
+    if(real(eigval(i,0)) > 1){
+      cout << real(eigval(i,0)) << " ";
+	//cout << log((double)B)/log(eigval(i)) << " ";
+      }
   }
 }
 
@@ -524,30 +531,30 @@ void writeMatGroup(matConvert &mat, unsigned long int group) {
 }
 
 bool checkSymmetry(matConvert mat) {
-    symmetryList.clear();
+  
     matConvert temp = mat;
     for (int rotNum = 0; rotNum < 4; rotNum++) {
-        for (int parNum = 0; parNum < Q; parNum++) {
+  
 
             for (int bndNum = 0; bndNum < N; bndNum++) {
                 for (int w = 0; w < N; w++) {
-                    for (int oneTwo = 0; oneTwo < 2; oneTwo++) {
-
-                        temp = mat;
-                        symmetryList.push_back(temp);
-			if(Z3 && Q == 2){
-			  mat.oneTwoSwitch();
-			}
-                    }
+                    
+		      
+                        
+		  cycleParity(mat,Q);
+			
+			
+			
+                    
                     mat.nextBoundaryY();
                 }
 
                 mat.nextBoundaryX();
             }
-	    if(Z3 && Q == 3){
-	      mat.nextParity();
-	    }
-        }
+
+
+
+
 
 	mat.rotate();
 
@@ -584,6 +591,20 @@ bool parityCheck(std::vector<int> qList, matConvert tmat, matConvert comp, matCo
         }
     }
     return false;
+}
+
+void cycleParity(matConvert &mat, int Qcur){
+  //function to recursively cycle through all the permutations for arbitrary Q
+  for(int i = 0; i < Qcur; i++){
+    
+
+    cycleParity(mat, Qcur - 1);
+    matConvert temp = mat;
+    symmetryList.push_back(temp);
+    mat.nextParity(Qcur);
+
+
+  }
 }
 
 void buildFileNamePrefix() {

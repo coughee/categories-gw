@@ -29,6 +29,7 @@ public:
     void nextBoundaryX();
     void nextBoundaryY();
     void nextParity();
+    void nextParity(int Qmax);
     void rotate();
     void makeBoundaryList();
     void makeParityList();
