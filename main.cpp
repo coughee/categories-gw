@@ -36,8 +36,8 @@ bool parityCheck(std::vector<int> qList, matConvert mat, matConvert comp, matCon
 bool parWrap(std::vector<int> qList, matConvert tmat, matConvert comp, matConvert ref);
 std::vector<int> calcCat(groupCounter &paraCount, matConvert &pLat, int* catHash[]);
 int boundary(int tmp, int Ntemp);
-void outputGod(std::vector<std::vector<std::vector< int > > > &God);
-void newtonRhapsonSolver(std::vector<std::vector<std::vector< int > > > &God);
+void outputGod(std::vector<std::vector<std::vector< char > > > &God);
+void newtonRhapsonSolver(std::vector<std::vector<std::vector< char > > > &God);
 void cycleParity(matConvert &mat, int Qcur);
 using namespace std;
 using namespace arma;
@@ -46,6 +46,7 @@ using namespace arma;
  */
 //Global Variables, sue me.
 bool Z3 = true, Z2 = true, ROT = true;
+int numMagFields = 0;
 int N = 0, Q = 0, B = 2;
 string filePrefix;
 double tol = 1e-2;
@@ -81,6 +82,9 @@ int main(int argc, char** argv) {
             i += 1;
         } else if (std::strcmp(argv[i], "-t") == 0) {
 	  tol = atof(argv[i + 1]);
+	  i += 1;
+	} else if(std::strcmp(argv[i], "-M") == 0){
+	  numMagFields = atoi(argv[i + 1]);
 	  i += 1;
 	}
     }
@@ -159,8 +163,8 @@ int main(int argc, char** argv) {
     int curCat;
     int parentCounter[paraCount.currentGroupCount()];
     //int God[paraCount.currentGroupCount()][(unsigned long int)pow(Q,N*N*(1 - 1/(B*B)))][paraCount.currentGroupCount()];
-    std::vector<std::vector<std::vector< int > > > God;
-    std::vector<int> tmp;
+    std::vector<std::vector<std::vector< char > > > God;
+    std::vector<char> tmp;
     God.resize(paraCount.currentGroupCount());
     tmp.resize(paraCount.currentGroupCount());
     cout << "God has been initialised" << endl;
@@ -226,7 +230,7 @@ int main(int argc, char** argv) {
     return 0;
 }
 
-void outputGod(std::vector<std::vector<std::vector<int > > > &God) {
+void outputGod(std::vector<std::vector<std::vector<char > > > &God) {
     ostringstream groupss;
     groupss << ".txt";
     stringstream ss;
@@ -253,7 +257,7 @@ void outputGod(std::vector<std::vector<std::vector<int > > > &God) {
     }
 }
 
-void newtonRhapsonSolver(std::vector<std::vector<std::vector< int  > > > &God){
+void newtonRhapsonSolver(std::vector<std::vector<std::vector< char  > > > &God){
   
   double coupling[God.size()];
   double couplingDeriv[God.size()];
@@ -533,8 +537,7 @@ bool checkSymmetry(matConvert mat) {
             for (int bndNum = 0; bndNum < N; bndNum++) {
                 for (int w = 0; w < N; w++) {
 		  mCopyMaster = mat;
-		  cycleParity(mCopyMaster,Q);
-	
+		  cycleParity(mCopyMaster,Q - numMagFields);
 		  mat.nextBoundaryY();
                 }
                 mat.nextBoundaryX();
