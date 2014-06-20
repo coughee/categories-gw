@@ -139,6 +139,7 @@ int main(int argc, char** argv) {
             catHash[i % (unsigned long int) (pow(Q, N * N / pow(B, 2.0)))][1] = 1;
             //writeMatGroup(mat,paraCount.currentGroupCount() - 1);
 
+
         }
 
     }
@@ -533,18 +534,21 @@ void writeMatGroup(matConvert &mat, unsigned long int group) {
 
 bool checkSymmetry(matConvert mat) {
   matConvert mCopyMaster = mat;
-  for (int rotNum = 0; rotNum < 4; rotNum++) {
-            for (int bndNum = 0; bndNum < N; bndNum++) {
-                for (int w = 0; w < N; w++) {
-		  mCopyMaster = mat;
-		  cycleParity(mCopyMaster,Q - numMagFields);
-		  mat.nextBoundaryY();
-                }
-                mat.nextBoundaryX();
-            }
-
-	mat.rotate();
-    }
+  for(int mir = 0; mir < 2; mir++){
+	  for (int rotNum = 0; rotNum < 4; rotNum++) {
+	            for (int bndNum = 0; bndNum < N; bndNum++) {
+	                for (int w = 0; w < N; w++) {
+			  mCopyMaster = mat;
+			  cycleParity(mCopyMaster,Q - numMagFields);
+			  mat.nextBoundaryY();
+	                }
+	                mat.nextBoundaryX();
+	            }
+	
+		mat.rotate();
+	    }
+	  mat.trans();
+  }
     return false;
 }
 

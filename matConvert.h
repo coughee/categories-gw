@@ -31,6 +31,7 @@ public:
     void nextParity();
     void nextParity(int Qmax);
     void rotate();
+    void trans();
     void makeBoundaryList();
     void makeParityList();
     int findRN();

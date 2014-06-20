@@ -36,6 +36,17 @@ int matConvert::returnValue(){
     return returnVal;
 }
 
+void matConvert::trans(){
+  matConvert templat = matConvert(1,this->base, this->N);
+  templat.lat = this->lat;
+  for(int i = 0; i < N; i++){
+    for(int j = 0; j < N; j++){
+      this->lat[i][j] = templat.lat[j][i];
+    }
+  }
+    
+}
+
 void matConvert::convertVal(unsigned long int value){
     this->curBoundaryX = 0;
     this->curBoundaryY = 0;
